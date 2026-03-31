@@ -25,6 +25,6 @@ jobs:
           airbase deploy --output deploy.env --yes
           source deploy.env
 
-          # airbase container deploy --output deploy.env --yes
+          # airbase container deploy --output deploy.env --yes abc
           # source deploy.env
           echo "App is deployed successfully! Visit [$DYNAMIC_ENVIRONMENT_URL]($DYNAMIC_ENVIRONMENT_URL) to view your app." >> $GITHUB_STEP_SUMMARY
