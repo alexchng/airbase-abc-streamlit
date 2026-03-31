@@ -5,18 +5,26 @@ jobs:
     runs-on: ubuntu-24.04
     if: github.ref_name == github.event.repository.default_branch
     container:
-      image: gdssingapore/airbase:cli
+      image: gdssingapore/airbase:cli-n
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Airbase Login
+        shell: bash
+        run: |
+          airbase --version
+          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
+          airbase login --ci
       - name: Airbase Build
-        run: airbase container build
+        run: airbase build
       - name: Airbase Deploy
         shell: bash
         run: |
-          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
           echo "${{ secrets.AIRBASE_ENV_LOCAL_FILE }}" > .env.local
 
-          airbase container deploy --output deploy.env --yes --project "${{ vars.AIRBASE_PROJECT_HANDLE }}" abc
+          airbase deploy --output deploy.env --yes
           source deploy.env
+
+          # airbase container deploy --output deploy.env --yes
+          # source deploy.env
           echo "App is deployed successfully! Visit [$DYNAMIC_ENVIRONMENT_URL]($DYNAMIC_ENVIRONMENT_URL) to view your app." >> $GITHUB_STEP_SUMMARY
