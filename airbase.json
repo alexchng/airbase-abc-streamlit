@@ -1,0 +1,5 @@
+{
+  "framework": "container",
+  "handle": "runtime/demo",
+  "port": 8501
+}
