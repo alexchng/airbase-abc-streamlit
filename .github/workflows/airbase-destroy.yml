@@ -5,10 +5,17 @@ jobs:
     runs-on: ubuntu-24.04
     if: github.ref_name == github.event.repository.default_branch
     container:
-      image: gdssingapore/airbase:cli
+      image: gdssingapore/airbase:cli-n
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Airbase Login
+        shell: bash
+        run: |
+          airbase --version
+          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
+          airbase login --ci
       - name: Airbase Destroy
         shell: bash
         run: |
-          echo "${{ secrets.AIRBASE_RC }}" > ~/.airbaserc
-          airbase container destroy --yes --project "${{ vars.AIRBASE_PROJECT_HANDLE }}" abc
+          airbase container destroy --yes abc
